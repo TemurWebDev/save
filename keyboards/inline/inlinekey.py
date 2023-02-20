@@ -9,3 +9,13 @@ til = InlineKeyboardMarkup(
         ],
     ]
 )
+
+
+rek = InlineKeyboardMarkup(
+    inline_keyboard=[
+    [
+        InlineKeyboardButton(text='✅ Ha',callback_data='ha'),
+        InlineKeyboardButton(text="❌ Yo'q",callback_data="yuq")
+    ],
+    ]
+)

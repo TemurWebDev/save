@@ -1,10 +1,13 @@
 import asyncio
 
 from aiogram import types
+from aiogram.types import CallbackQuery
 
 from data.config import ADMINS
+from aiogram.dispatcher import FSMContext
 from loader import dp, db, bot
 from keyboards.default.adminKey import adminusers,admincommands
+from keyboards.inline.inlinekey import rek
 
 
 @dp.message_handler(text="/start", user_id=ADMINS)
@@ -41,12 +44,29 @@ async def back_button(message: types.Message):
 
 
 
+@dp.message_handler(text="reklama",user_id=ADMINS)
+async def bot_start(message: types.Message, state: FSMContext):
+    await message.answer("reklama yuboring")
+    await state.set_state("reklama")
 
-@dp.message_handler(text="reklama", user_id=ADMINS)
-async def send_ad_to_all(message: types.Message):
-    users = db.select_all_users()
-    for user in users:
-        user_id = user[1]
-        await bot.send_message(chat_id=user_id, text="@pythonapiuz kanaliga obuna bo'ling!")
-        await asyncio.sleep(0.05)
+
+
+@dp.message_handler(state='reklama')
+async def send_ad_to_all(message: types.Message,state: FSMContext):
+    await bot.send_message(chat_id=ADMINS[0],text=f"Habar to'g'rimi ‼️\n{message.text}",reply_markup=rek)
+    @dp.callback_query_handler(text="ha",state='reklama')
+    async def rek_ha(call: CallbackQuery):
+        users = db.select_all_users()
+        for user in users:
+            user_id = user[1]
+            await bot.send_message(chat_id=user_id, text=f"{message.text}")
+            await asyncio.sleep(0.05)
+        await bot.send_message(chat_id=ADMINS[0],text=f"Reklama yuborildi! ✅")
+        await state.finish()
+        await call.message.delete()
+    @dp.callback_query_handler(text="yuq",state='reklama')
+    async def rek_yuq(call: CallbackQuery):
+        await bot.send_message(chat_id=ADMINS[0],text="Reklama yuborilmadi! ❌")
+        await state.finish()
+        await call.message.delete()
 
