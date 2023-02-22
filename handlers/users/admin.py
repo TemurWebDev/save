@@ -33,7 +33,7 @@ async def get_all_users(message: types.Message):
     users = db.select_all_users()
     text = f"instabot || Foydalanuvchilar soni: {count[0]}\n\n"
     for user in users:
-        text+= f"{user[0]}). || {user[2]} || @{user[3]}\n"
+        text+= f"{user[0]}). || {user[2]} || @{user[3]} || {user[4]}\n"
     await message.answer(text)
 
 

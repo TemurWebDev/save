@@ -28,5 +28,9 @@ async def bot_start(message: types.Message):
 
     if user[4] == None:
         await message.reply(f"🇺🇿 Tilni tanlang\n🇺🇸 Select a language\n🇷🇺 Выберите язык", reply_markup=til)
-    else:
+    elif user[4] == 'uz':
         await message.answer('salom')
+    elif user[4] == 'en':
+        await message.answer('Hello there')
+    elif user[4] == 'ru':
+        await message.answer('Привет')
